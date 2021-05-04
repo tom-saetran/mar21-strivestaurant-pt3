@@ -7,7 +7,7 @@ class DishComments extends React.Component {
             <div className={`mt-${this.props.marginTop}`}>
                 <h2>Comments for {this.props.dish.name}</h2>
 
-                {this.state.dish ? (
+                {this.props.dish ? (
                     <ListGroup>
                         {this.props.dish.comments.map(c => (
                             <ListGroup.Item key={c.id}>

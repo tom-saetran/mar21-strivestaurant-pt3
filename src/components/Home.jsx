@@ -70,7 +70,7 @@ class Home extends React.Component {
                         </Carousel>
                     </Col>
                 </Row>
-                {!this.state.selectedDish.name === "Amatriciana" && (
+                {this.state.selectedDish.name !== "Amatriciana" && (
                     <Row className="justify-content-center mt-3">
                         <Col xs={12} md={8}>
                             <DishComments dish={this.state.selectedDish} marginTop={0} />
