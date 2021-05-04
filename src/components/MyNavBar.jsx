@@ -3,12 +3,13 @@
 
 // a functional component is just an arrow function returning JSX
 
+import React from "react"
 import { Navbar, Nav } from "react-bootstrap"
 
 class MyNavBar extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { init: new Date.now() }
+        this.state = { init: Date.now() }
     }
 
     componentDidMount = () => {

@@ -1,5 +1,5 @@
 import React from "react"
-import { Carousel, Col, Container, Row } from "react-bootstrap"
+import { Carousel, Col, Container, Row, Alert } from "react-bootstrap"
 import items from "../data/menu.json"
 import DishComments from "./DishComments"
 import ReservationForm from "./ReservationForm"
@@ -77,7 +77,7 @@ class Home extends React.Component {
                         </Col>
                     </Row>
                 )}
-                {this.state.selectedDish.comments.map(comment => comment.rating < 5) ? (
+                {this.state.selectedDish.comments.find(comment => comment.rating < 5) ? (
                     <Alert key="alert" variant="danger">
                         Rating is below 5!
                     </Alert>
