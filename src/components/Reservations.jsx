@@ -1,16 +1,15 @@
-import { Component } from 'react'
-import { Alert, ListGroup, Spinner } from 'react-bootstrap'
-import { convertDate } from '../helpers/dates'
+import { Component } from "react"
+import { Alert, ListGroup, Spinner } from "react-bootstrap"
+import { convertDate } from "../helpers/dates"
 
 class Reservations extends Component {
-
     // every time you need to fetch data from an endpoint (API)
     // in a react component, set up the state accordingly
 
     state = {
         reservations: [],
         isLoading: false,
-        isError: false,
+        isError: false
     }
 
     // the next step is where to put our fetch
@@ -29,23 +28,22 @@ class Reservations extends Component {
         // then we can grab the data, we can do the expensive operations of fetch in componentDidMount
         // and finally we can present the data we fetched back to the user
 
-        console.log('you should see this console.log just once every reload')
+        console.log("you should see this console.log just once every reload")
 
         // let's fetch our data!
         try {
-
             this.setState({
                 isLoading: true
             })
 
-            let response = await fetch('https://striveschool.herokuapp.com/api/reservation')
+            let response = await fetch("https://striveschool.herokuapp.com/api/reservation")
             console.log(response)
             if (response.ok) {
                 let data = await response.json()
                 console.log(data)
                 this.setState({ reservations: data, isError: false, isLoading: false })
             } else {
-                console.log('houston we got an error')
+                console.log("houston we got an error")
                 this.setState({ isError: true, isLoading: false })
             }
         } catch (error) {
@@ -54,8 +52,8 @@ class Reservations extends Component {
         }
     }
 
-    selectedStyle = { border: '2px solid red', color: 'red' }
-    notSelectedStyle = { border: 'none', color: 'black' }
+    selectedStyle = { border: "2px solid red", color: "red" }
+    notSelectedStyle = { border: "none", color: "black" }
 
     render() {
         // render is not suitable for putting a fetch
@@ -66,27 +64,21 @@ class Reservations extends Component {
         // and I cannot set the state here either
         // this.setState({ reservations: ['stefano'] })
 
-
         return (
             <>
-                <h3>RESERVATIONS</h3>
+                <h3>{this.props.header ? this.props.header : "RESERVATIONS"}</h3>
                 {/* conditional rendering */}
-                {
-                    this.state.isLoading &&
-                    <Spinner animation="border" variant="primary" />
-                }
-                {
-                    !this.state.isLoading && this.state.isError &&
+                {this.state.isLoading && <Spinner animation="border" variant="primary" />}
+                {!this.state.isLoading && this.state.isError && (
                     // loading must NOT be in process and we need an error in the state
                     <Alert variant="danger">Aww snap! We got an error!</Alert>
-                }
-                { !this.state.isLoading &&
+                )}
+                {!this.state.isLoading && (
                     <ListGroup>
-                        {
-                            this.state.reservations.length > 0 ?
-                                this.state.reservations.map(reservation => (
-                                    <ListGroup.Item key={reservation._id}>
-                                        {/* 
+                        {this.state.reservations.length > 0 ? (
+                            this.state.reservations.map(reservation => (
+                                <ListGroup.Item key={reservation._id}>
+                                    {/* 
                                             1) convert the string into a Date with parseISO
                                             2) convert the Date back to a string with format
 
@@ -94,14 +86,18 @@ class Reservations extends Component {
                                             parseISO(reservation.dateTime) -> Date
                                             format(parseISO(reservation.dateTime), "yyyy") -> string
                                         */}
-                                        {/* {console.log(format(parseISO(reservation.dateTime), "yyyy-MMM-dd"))} */}
-                                        <p>From: {reservation.name}, for {reservation.numberOfPersons}</p>
-                                        <p>at {convertDate(reservation.dateTime)}</p>
-                                    </ListGroup.Item>
-                                ))
-                                : <p>We don't have reservations yet!</p>
-                        }
-                    </ListGroup>}
+                                    {/* {console.log(format(parseISO(reservation.dateTime), "yyyy-MMM-dd"))} */}
+                                    <p>
+                                        From: {reservation.name}, for {reservation.numberOfPersons}
+                                    </p>
+                                    <p>at {convertDate(reservation.dateTime)}</p>
+                                </ListGroup.Item>
+                            ))
+                        ) : (
+                            <p>We don't have reservations yet!</p>
+                        )}
+                    </ListGroup>
+                )}
             </>
         )
     }

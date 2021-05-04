@@ -1,9 +1,9 @@
-import React from 'react'
-import { Carousel, Col, Container, Row } from 'react-bootstrap'
-import items from '../data/menu.json'
-import DishComments from './DishComments'
-import ReservationForm from './ReservationForm'
-import Reservations from './Reservations'
+import React from "react"
+import { Carousel, Col, Container, Row } from "react-bootstrap"
+import items from "../data/menu.json"
+import DishComments from "./DishComments"
+import ReservationForm from "./ReservationForm"
+import Reservations from "./Reservations"
 
 // .map
 // we need to work with the state object to keep track of which dish we selected
@@ -13,13 +13,13 @@ import Reservations from './Reservations'
 // functional components are a touch faster
 
 class Home extends React.Component {
-
     // let's declare the INITIAL state for my component
     // the state is an object for keeping track of things during
     // the lifespan of our page/component
 
     state = {
         selectedDish: items[0], // we always need to provide an initial state for our component
+        header: "I R HEADER"
     }
 
     // the state object in a react component is READ-ONLY
@@ -28,14 +28,15 @@ class Home extends React.Component {
     // the parameter you pass to setState will always be an object
     // that object will be MERGED into the current state
 
-    render() { // render is the ONLY REQUIRED method in a class component
+    render() {
+        // render is the ONLY REQUIRED method in a class component
         console.log(this.props)
         return (
             <Container>
                 {/* <div class="container" /> */}
                 <Row className="justify-content-center mt-3">
                     <Col xs={12} md={8}>
-                        <Reservations />
+                        <Reservations header={this.state.header} />
                     </Col>
                 </Row>
                 <Row className="justify-content-center mt-3">
@@ -44,8 +45,8 @@ class Home extends React.Component {
                                 COL CONTENT
                             </div>
                         */}
-                        <h1>Welcome to Strivestaurant</h1>
-                        <p>The best pasta dishes you can find on the web!</p>
+                        <h1>{this.props.newTitle ? this.props.newTitle : "Welcome to Strivestaurant"}</h1>
+                        <p>{this.props.newPayoff ? this.props.newPayoff : "The best pasta dishes you can find on the web!"}</p>
                         <Carousel>
                             {
                                 // every time you do a .map in react you'll need to
@@ -58,11 +59,7 @@ class Home extends React.Component {
                                         onClick={() => this.setState({ selectedDish: item })}
                                     >
                                         {/* the key is necessary for React's VIRTUAL DOM */}
-                                        <img
-                                            className="d-block w-100"
-                                            src={item.image}
-                                            alt="First slide"
-                                        />
+                                        <img className="d-block w-100" src={item.image} alt="First slide" />
                                         <Carousel.Caption>
                                             <h3>{item.name}</h3>
                                             <p>{item.description}</p>
@@ -73,16 +70,24 @@ class Home extends React.Component {
                         </Carousel>
                     </Col>
                 </Row>
-                <Row className="justify-content-center mt-3">
-                    <Col xs={12} md={8}>
-                        <DishComments dish={this.state.selectedDish} marginTop={0} />
-                    </Col>
-                </Row>
-                <Row className="justify-content-center mt-3">
-                    <Col xs={12} md={8}>
-                        <ReservationForm />
-                    </Col>
-                </Row>
+                {!this.state.selectedDish.name === "Amatriciana" && (
+                    <Row className="justify-content-center mt-3">
+                        <Col xs={12} md={8}>
+                            <DishComments dish={this.state.selectedDish} marginTop={0} />
+                        </Col>
+                    </Row>
+                )}
+                {this.state.selectedDish.comments.map(comment => comment.rating < 5) ? (
+                    <Alert key="alert" variant="danger">
+                        Rating is below 5!
+                    </Alert>
+                ) : (
+                    <Row className="justify-content-center mt-3">
+                        <Col xs={12} md={8}>
+                            <ReservationForm />
+                        </Col>
+                    </Row>
+                )}
             </Container>
         )
     }
